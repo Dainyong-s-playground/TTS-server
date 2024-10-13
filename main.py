@@ -1,4 +1,5 @@
 import io
+import torch
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -10,9 +11,8 @@ tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2")
 
 class InputSentence(BaseModel):
     sentence: str
-    speaker: str
-    language: str
-
+    speaker: str = "XTTS_v2/ko-KR-6"
+    language: str = "ko"
 
 @app.post("/generate")
 async def generate_speech(input: InputSentence):
@@ -25,7 +25,6 @@ async def generate_speech(input: InputSentence):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 if __name__ == "__main__":
     import uvicorn
